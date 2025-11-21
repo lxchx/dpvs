@@ -1721,22 +1721,24 @@ if test "$enable_lvs" != no; then
     fi
   fi
 
-  dnl ----[ IPVS tunnel type ]----
-  dnl -- Since Linux 5.2
-  AC_CHECK_DECLS([IPVS_DEST_ATTR_TUN_TYPE],
-    [
-      AC_DEFINE([_HAVE_IPVS_TUN_TYPE_], [ 1 ], [Define to 1 if have IPVS tunnel type])
-      add_system_opt([IPVS_TUN_TYPE])
-    ], [],
-    [[#include <linux/ip_vs.h>]])
-
-  dnl -- Since Linux 5.3
-  AC_CHECK_DECLS([IP_VS_TUNNEL_ENCAP_FLAG_NOCSUM],
-    [
-      AC_DEFINE([_HAVE_IPVS_TUN_CSUM_], [ 1 ], [Define to 1 if have IPVS tunnel checksum options])
-      add_system_opt([IPVS_TUN_CSUM])
-    ], [],
-    [[#include <linux/ip_vs.h>]])
+# DPVS still lacks tun_type/tun_port/tun_flags support, so disable the
+# kernel-side detection and keep the compat struct on the legacy ABI.
+#  dnl ----[ IPVS tunnel type ]----
+#  dnl -- Since Linux 5.2
+#  AC_CHECK_DECLS([IPVS_DEST_ATTR_TUN_TYPE],
+#    [
+#      AC_DEFINE([_HAVE_IPVS_TUN_TYPE_], [ 1 ], [Define to 1 if have IPVS tunnel type])
+#      add_system_opt([IPVS_TUN_TYPE])
+#    ], [],
+#    [[#include <linux/ip_vs.h>]])
+#
+#  dnl -- Since Linux 5.3
+#  AC_CHECK_DECLS([IP_VS_TUNNEL_ENCAP_FLAG_NOCSUM],
+#    [
+#      AC_DEFINE([_HAVE_IPVS_TUN_CSUM_], [ 1 ], [Define to 1 if have IPVS tunnel checksum options])
+#      add_system_opt([IPVS_TUN_CSUM])
+#    ], [],
+#    [[#include <linux/ip_vs.h>]])
 
   dnl -- Since Linux 5.3
   AC_CHECK_DECLS([IP_VS_CONN_F_TUNNEL_TYPE_GRE],
